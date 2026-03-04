@@ -5,7 +5,7 @@ Welcome! I am a **Civil Engineer** specializing in **Transportation Engineering*
 ---
 
 ### 🌐 Connect with Me
-[![Website](https://img.shields.io/badge/Website-anmajharul.bd-blue?style=for-the-badge&logo=googlechrome)](https://anmajharul.bd) 
+[![Portfolio](https://img.shields.io/badge/Website-anmajharul.bd-blue?style=for-the-badge&logo=googlechrome)](https://anmajharul.bd) 
 [![ResearchGate](https://img.shields.io/badge/ResearchGate-Profile-00CCBB?style=for-the-badge&logo=researchgate)](https://www.researchgate.net/profile/Majharul-Islam-12)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-anmajharul-0A66C2?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/anmajharul)
 [![X](https://img.shields.io/badge/X-anmajharul-black?style=for-the-badge&logo=x)](https://x.com/anmajharul)
