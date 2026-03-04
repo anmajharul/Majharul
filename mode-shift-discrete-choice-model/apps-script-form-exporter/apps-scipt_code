@@ -1,42 +1,52 @@
+/**
+ * Automated Google Form to Document Exporter
+ * Developed for: Mode Shift Behavior Research
+ */
 function exportBeautifulFormToDoc() {
+  // Access the active form and fetch all question items
   var form = FormApp.getActiveForm();
   var items = form.getItems();
 
+  // Create a new Google Doc with a professional title
   var docName = form.getTitle() + " - Survey Instrument";
   var doc = DocumentApp.create(docName);
   var body = doc.getBody();
 
-  // টাইটেল এবং ডেসক্রিপশন ফরম্যাটিং
+  // Define Title and Description Styles
   var titleStyle = {};
   titleStyle[DocumentApp.Attribute.FONT_FAMILY] = 'Arial';
   titleStyle[DocumentApp.Attribute.FONT_SIZE] = 12;
   titleStyle[DocumentApp.Attribute.BOLD] = true;
 
+  // Append and format the Title
   var headerObj = body.appendParagraph(form.getTitle());
   headerObj.setAttributes(titleStyle);
   headerObj.setAlignment(DocumentApp.HorizontalAlignment.CENTER);
 
+  // Append Description if available
   if (form.getDescription()) {
     var descObj = body.appendParagraph(form.getDescription());
     descObj.setItalic(true).setFontSize(11).setAlignment(DocumentApp.HorizontalAlignment.CENTER);
   }
 
+  // Visual separation
   body.appendParagraph("\n");
   body.appendHorizontalRule();
   body.appendParagraph("\n");
 
-  // প্রশ্নের স্টাইল
+  // Define Global Question Style
   var qStyle = {};
   qStyle[DocumentApp.Attribute.BOLD] = true;
   qStyle[DocumentApp.Attribute.FONT_SIZE] = 12;
 
   var questionCounter = 1;
 
+  // Iterate through all items in the form
   for (var i = 0; i < items.length; i++) {
     var item = items[i];
     var type = item.getType();
 
-    // অপ্রয়োজনীয় জিনিস বাদ দেওয়া এবং সেকশন ব্রেক হ্যান্ডেল করা
+    // Skip unnecessary items and handle Page Breaks
     if (type === FormApp.ItemType.PAGE_BREAK || type === FormApp.ItemType.IMAGE || type === FormApp.ItemType.VIDEO) {
       if (type === FormApp.ItemType.PAGE_BREAK) {
         body.appendParagraph("--- Section Break ---").setAlignment(DocumentApp.HorizontalAlignment.CENTER).setItalic(true).setForegroundColor('#7F8C8D');
@@ -45,7 +55,7 @@ function exportBeautifulFormToDoc() {
       continue;
     }
 
-    // সেকশন হেডার
+    // Handle Section Headers
     if (type === FormApp.ItemType.SECTION_HEADER) {
        body.appendParagraph(item.getTitle()).setHeading(DocumentApp.ParagraphHeading.HEADING3);
        if(item.getHelpText()) {
@@ -54,13 +64,13 @@ function exportBeautifulFormToDoc() {
        continue;
     }
 
-    // মূল প্রশ্ন প্রিন্ট করা
+    // Print Main Question text
     var title = item.getTitle();
     var p = body.appendParagraph("Q" + questionCounter + ". " + title);
     p.setAttributes(qStyle);
     questionCounter++;
 
-    // প্রশ্নের ধরন অনুযায়ী অপশন সাজানো
+    // Format options based on Question Type
     switch (type) {
       case FormApp.ItemType.TEXT:
       case FormApp.ItemType.PARAGRAPH_TEXT:
@@ -76,7 +86,7 @@ function exportBeautifulFormToDoc() {
         else if (type === FormApp.ItemType.LIST) choices = item.asListItem().getChoices();
 
         for (var j = 0; j < choices.length; j++) {
-          // চেকবক্স হলে চারকোনা, অন্যথায় গোল সিম্বল
+          // Use square checkbox for Checkbox types, circle for others
           var symbol = (type === FormApp.ItemType.CHECKBOX) ? "☐ " : "○ ";
           body.appendParagraph("   " + symbol + choices[j].getValue()).setIndentStart(36).setFontSize(11);
         }
@@ -91,7 +101,7 @@ function exportBeautifulFormToDoc() {
 
       case FormApp.ItemType.GRID:
       case FormApp.ItemType.CHECKBOX_GRID:
-         body.appendParagraph("   [ Grid Matrix Question - See original form for 2D layout ]").setIndentStart(36).setItalic(true).setForegroundColor('#555555');
+         body.appendParagraph("   [ Grid Matrix Question - Refer to original form for 2D layout ]").setIndentStart(36).setItalic(true).setForegroundColor('#555555');
          body.appendParagraph("");
          break;
 
@@ -100,9 +110,11 @@ function exportBeautifulFormToDoc() {
     }
   }
 
+  // Alert the user upon success
   try {
     FormApp.getUi().alert('Success! Document perfectly formatted.\nName: ' + docName);
   } catch (e) {
     Logger.log('Success: Formatted document created in Drive.');
+    Logger.log('File Name: ' + docName);
   }
 }
