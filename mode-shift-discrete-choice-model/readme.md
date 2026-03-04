@@ -1,147 +1,134 @@
-# Mode Shift Behavior Using Discrete Choice Models
+# Majharul Islam
 
-This repository contains the code, tools, and supporting materials used in the Civil Engineering thesis research:
+Transportation Engineering Researcher | Travel Behavior Analysis | Urban Mobility Systems
 
-**"Mode Shift Behavior Using Discrete Choice Models: A Case Study of BUBT Students in Dhaka"**
+Welcome to my GitHub research portfolio.
+This space contains my **transportation engineering research projects, analytical tools, survey systems, and data processing scripts** developed for academic research and experimentation.
 
-The project analyzes travel behavior of university students and examines how factors such as **travel time, cost, comfort, reliability, and safety** influence transportation mode choice.
-
-The repository also includes tools for **survey generation, data collection preparation, and analysis workflows**.
+My work focuses on understanding how people choose between different transport modes and how **time, cost, comfort, reliability, and safety influence travel behavior**.
 
 ---
 
-# Research Objective
+## Research Interests
 
-The objective of this research is to understand how students choose between different transport modes such as:
+Transportation Engineering
+Travel Behavior Analysis
+Mode Choice Modeling
+Discrete Choice Models
+Urban Mobility Systems
+Transportation Data Analysis
+Survey-Based Travel Research
+
+---
+
+## Current Research
+
+### Mode Shift Behavior Using Discrete Choice Models
+
+**Case Study: BUBT Students in Dhaka**
+
+This research investigates how university students choose between different transport modes such as:
 
 * MRT (Metro Rail)
 * Public Bus
-* Ridesharing (Uber / Pathao)
+* Ridesharing
 * Private Car
 * Motorcycle
 * Rickshaw
 
-The study focuses on identifying the **key factors that influence mode switching behavior** using discrete choice modeling approaches.
+The study examines how changes in **travel cost, travel time, reliability, comfort, and safety** influence mode switching decisions.
+
+Methods used in the research:
+
+* Travel behavior survey design
+* Discrete choice modeling
+* Transportation data analysis
 
 ---
 
-# Repository Structure
+## Research Tools in This Repository
 
-```
-mode-shift-discrete-choice-model
-│
-├── README.md
-│
-├── apps-script-form-exporter
-│   └── README.md
-│
-├── Appscipt_Code
-│   └── README.md
-│
-└── python-docx-generator
-    └── README.md
-```
+### Python Survey Generator
 
----
+A Python-based tool that converts raw survey text into a formatted **Microsoft Word (.docx) questionnaire** automatically.
 
-# Project Components
-
-## 1. python-docx-generator
-
-This module contains a Python script that automatically generates a formatted **Word (.docx) survey questionnaire** from raw text.
-
-Features:
+Key features:
 
 * Automatic question formatting
-* Checkbox options
-* Likert scale ratings
+* Checkbox option generation
+* Likert scale rating system
 * Clean academic survey layout
 
-The tool helps researchers quickly create survey forms without manual formatting.
+---
+
+### Google Apps Script Automation
+
+Scripts used to manage and export **Google Form responses** for research data collection and processing.
 
 ---
 
-## 2. apps-script-form-exporter
+## Technologies I Use
 
-This component contains scripts related to **Google Apps Script automation** for exporting or managing form responses.
-
-It helps in organizing survey responses collected through online forms.
-
----
-
-## 3. Appscipt_Code
-
-This folder contains supporting scripts used for handling survey workflow and form integration.
+Python
+Google Apps Script
+GitHub
+Visual Studio Code
+Microsoft Word
+Survey Design Tools
 
 ---
 
-# Survey Design
+## Current Projects
 
-The survey used in this research collects information on:
-
-* Socioeconomic characteristics
-* Travel origin and destination
-* Mode choice
-* Travel time and cost
-* Comfort level
-* Reliability perception
-* Safety perception
-* Mode switching behavior
-
-The questionnaire is designed to support **discrete choice modeling analysis**.
+Mode Shift Behavior Using Discrete Choice Models
+Transportation Survey Automation Tools
+Research Data Processing Scripts
 
 ---
 
-# Tools and Technologies
+## Website
 
-The following tools are used in this project:
-
-* Python
-* python-docx
-* Google Apps Script
-* Microsoft Word
-* Visual Studio Code
+Personal Website
+https://anmajharul.bd
 
 ---
 
-# How to Use the Survey Generator
+## Connect With Me
 
-1. Create a project folder
-2. Open it in **Visual Studio Code**
-3. Create a Python file named `create_survey.py`
-4. Paste the survey generator script
-5. Install the required library:
+Website
+https://anmajharul.bd
 
-```
-pip install python-docx
-```
+GitHub
+https://github.com/
 
-6. Run the script:
-
-```
-python create_survey.py
-```
-
-The script will generate a formatted **Word survey form** automatically.
+LinkedIn
+(Add your LinkedIn link here)
 
 ---
 
-# Research Field
+## Academic Background
 
-Transportation Engineering
-Travel Behavior Analysis
-Discrete Choice Modeling
+Civil Engineering
+Bangladesh University of Business and Technology (BUBT)
+
+---
+
+## Research Goal
+
+My goal is to contribute to **transportation planning and urban mobility research** by analyzing travel behavior and developing tools that support better transportation decision-making.
 
 ---
 
 # Author
 
-**Majharul Islam**
-Civil Engineering Student
+Majharul Islam  
+Civil Engineering Student  
 Bangladesh University of Business and Technology (BUBT)
 
----
+Research Focus:
+Transportation Engineering  
+Travel Behavior Analysis  
+Discrete Choice Modeling
 
-# License
 
-This repository is intended for **academic and research purposes**.
+© Majharul Islam – Research Portfolio
