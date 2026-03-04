@@ -5,14 +5,14 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 def create_ultimate_survey(raw_text, output_filename="BUBT_Survey_Final_Perfect.docx"):
     doc = Document()
     
-    # গ্লোবাল স্টাইল সেটআপ: Arial, Size 12, Black color
+    # Global Style Setup: Arial, Size 12, Black color
     style = doc.styles['Normal']
     font = style.font
     font.name = 'Arial'
     font.size = Pt(12)
     font.color.rgb = RGBColor(0, 0, 0)
     
-    # সম্পূর্ণ জিরো স্পেসিং লজিক
+    # Complete Zero Spacing Logic to optimize paper usage 
     style.paragraph_format.space_before = Pt(0)
     style.paragraph_format.space_after = Pt(0)
     style.paragraph_format.line_spacing = 1.0
@@ -22,7 +22,7 @@ def create_ultimate_survey(raw_text, output_filename="BUBT_Survey_Final_Perfect.
     for line in lines:
         line = line.strip()
         
-        # ফাঁকা লাইন পুরোপুরি স্কিপ
+        # Skip empty lines completely
         if not line:
             continue
             
@@ -30,30 +30,30 @@ def create_ultimate_survey(raw_text, output_filename="BUBT_Survey_Final_Perfect.
         p.paragraph_format.space_before = Pt(0)
         p.paragraph_format.space_after = Pt(0)
             
-        # সেকশন ব্রেক বা দাগ
+        # Section break or horizontal divider [cite: 245, 270, 298]
         if "--- Section Break ---" in line or "________________________________________________" in line:
             p.alignment = WD_ALIGN_PARAGRAPH.CENTER
             run = p.add_run("__________________________________________________")
             run.font.color.rgb = RGBColor(150, 150, 150)
             continue
             
-        # প্রশ্ন (Q1, Q2 ইত্যাদি)
+        # Questions (Q1, Q2, etc.) [cite: 242, 246, 252]
         if line.startswith('Q') and '.' in line[:5]:
             run = p.add_run(line)
             run.bold = True
             
-        # সাধারণ অপশন (চেকবক্স)
+        # Standard options (Checkboxes) [cite: 243-244, 249-251]
         elif line.startswith('☐') or line.startswith('○'):
             clean_option = line.replace('○', '☐').strip() 
             run = p.add_run(clean_option)
             p.paragraph_format.left_indent = Inches(0.2)
             
-        # শূন্যস্থান
+        # Blank spaces for manual input [cite: 247, 253, 271]
         elif line.startswith('__'):
             run = p.add_run("   _______________________________________")
             run.font.color.rgb = RGBColor(100, 100, 100)
             
-        # স্কেল রেটিং বক্স লজিক (যেটা আপনার ফাইলে মিসিং ছিল)
+        # Scale rating box logic (Transforms text scale into 5 checkboxes) [cite: 297, 317, 323]
         elif line.startswith('['):
             clean_line = line.replace('[ Scale:', '').replace(']', '').strip()
             parts = clean_line.split('<--->')
@@ -63,21 +63,21 @@ def create_ultimate_survey(raw_text, output_filename="BUBT_Survey_Final_Perfect.
             
             p.paragraph_format.left_indent = Inches(0.2)
             
-            # বাম পাশের লেবেল
+            # Left-side label
             run_left = p.add_run(f"{left_label}  ")
             run_left.font.color.rgb = RGBColor(80, 80, 80)
             run_left.font.size = Pt(10)
             
-            # ৫টি রেটিং বক্স
+            # 5 Rating boxes
             run_boxes = p.add_run("☐ 1   ☐ 2   ☐ 3   ☐ 4   ☐ 5")
             run_boxes.bold = True
             
-            # ডান পাশের লেবেল
+            # Right-side label
             run_right = p.add_run(f"  {right_label}")
             run_right.font.color.rgb = RGBColor(80, 80, 80)
             run_right.font.size = Pt(10)
             
-        # সাধারণ টেক্সট (টাইটেল বা ডেসক্রিপশন)
+        # General text (Title or Description) [cite: 231-241]
         else:
             if "Mode Shift Behavior" in line: 
                 p.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -91,7 +91,7 @@ def create_ultimate_survey(raw_text, output_filename="BUBT_Survey_Final_Perfect.
     print(f"Success! Ultimate survey form saved as: {output_filename}")
 
 
-# আপনার সম্পূর্ণ র টেক্সট এখানে বসান
+# Paste your full raw survey text here 
 raw_survey_text = """
 Mode Shift Behavior Using Discrete Choice Models: A Case Study of BUBT Students in Dhaka
 This BUBT Civil Engineering thesis analyzes how you trade Time vs. Money vs. Comfort. We need your brutal honesty: If you would switch to a local bus to save 20 Taka, say so. Don't give "ideal" answers—give us reality. Target: Current BUBT Students Only. Time Required: Approx. 3-5 minutes. Privacy: Your responses are 100% anonymous and will be used strictly for academic statistical analysis.
@@ -238,4 +238,5 @@ Q29. If a dedicated BUBT Student Bus was introduced in your area with a strict d
 ☐ No, my current mode is faster / more comfortable.
 """
 
-create_ultimate_survey(raw_survey_text)
+if __name__ == "__main__":
+    create_ultimate_survey(raw_survey_text)
