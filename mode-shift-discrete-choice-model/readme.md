@@ -131,4 +131,5 @@ Travel Behavior Analysis
 Discrete Choice Modeling
 
 [![Portfolio](https://img.shields.io/badge/Website-anmajharul.bd-blue?style=for-the-badge&logo=googlechrome)](https://anmajharul.bd) 
+
 © Majharul Islam – Research Portfolio
