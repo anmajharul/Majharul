@@ -15,7 +15,7 @@ Welcome! I am a **Civil Engineer** specializing in **Transportation Engineering*
 ### 🧬 Research Focus
 Currently, I am working on my B.Sc. thesis:  
 **"Mode Shift Behavior Using Discrete Choice Models: A Case Study of BUBT Students in Dhaka"**.  
-My research utilizes mathematical modeling to analyze trade-offs in urban transit and optimize sustainable mobility. I am actively preparing for a **fully funded M.Sc./Ph.D. program** for the **2027 intake**.
+My research utilizes mathematical modeling to analyze trade-offs in urban transit and optimize sustainable mobility. I am actively preparing for a **fully funded M.Sc. program** for the **2027 intake**.
 
 ---
 
