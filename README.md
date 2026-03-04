@@ -47,3 +47,16 @@ This repository (`Majharul`) serves as a central hub for my research codes and d
 
 "Academic precision meets engineering excellence." — **[anmajharul.bd](https://anmajharul.bd)**
 
+# Author
+
+Majharul Islam  
+Civil Engineering Student  
+Bangladesh University of Business and Technology (BUBT)
+
+Research Focus:
+Transportation Engineering  
+Travel Behavior Analysis  
+Discrete Choice Modeling
+
+
+© Majharul Islam – Research Portfolio
