@@ -1,0 +1,108 @@
+function exportBeautifulFormToDoc() {
+  var form = FormApp.getActiveForm();
+  var items = form.getItems();
+
+  var docName = form.getTitle() + " - Survey Instrument";
+  var doc = DocumentApp.create(docName);
+  var body = doc.getBody();
+
+  // টাইটেল এবং ডেসক্রিপশন ফরম্যাটিং
+  var titleStyle = {};
+  titleStyle[DocumentApp.Attribute.FONT_FAMILY] = 'Arial';
+  titleStyle[DocumentApp.Attribute.FONT_SIZE] = 12;
+  titleStyle[DocumentApp.Attribute.BOLD] = true;
+
+  var headerObj = body.appendParagraph(form.getTitle());
+  headerObj.setAttributes(titleStyle);
+  headerObj.setAlignment(DocumentApp.HorizontalAlignment.CENTER);
+
+  if (form.getDescription()) {
+    var descObj = body.appendParagraph(form.getDescription());
+    descObj.setItalic(true).setFontSize(11).setAlignment(DocumentApp.HorizontalAlignment.CENTER);
+  }
+
+  body.appendParagraph("\n");
+  body.appendHorizontalRule();
+  body.appendParagraph("\n");
+
+  // প্রশ্নের স্টাইল
+  var qStyle = {};
+  qStyle[DocumentApp.Attribute.BOLD] = true;
+  qStyle[DocumentApp.Attribute.FONT_SIZE] = 12;
+
+  var questionCounter = 1;
+
+  for (var i = 0; i < items.length; i++) {
+    var item = items[i];
+    var type = item.getType();
+
+    // অপ্রয়োজনীয় জিনিস বাদ দেওয়া এবং সেকশন ব্রেক হ্যান্ডেল করা
+    if (type === FormApp.ItemType.PAGE_BREAK || type === FormApp.ItemType.IMAGE || type === FormApp.ItemType.VIDEO) {
+      if (type === FormApp.ItemType.PAGE_BREAK) {
+        body.appendParagraph("--- Section Break ---").setAlignment(DocumentApp.HorizontalAlignment.CENTER).setItalic(true).setForegroundColor('#7F8C8D');
+        body.appendParagraph("");
+      }
+      continue;
+    }
+
+    // সেকশন হেডার
+    if (type === FormApp.ItemType.SECTION_HEADER) {
+       body.appendParagraph(item.getTitle()).setHeading(DocumentApp.ParagraphHeading.HEADING3);
+       if(item.getHelpText()) {
+         body.appendParagraph(item.getHelpText()).setItalic(true).setFontSize(10);
+       }
+       continue;
+    }
+
+    // মূল প্রশ্ন প্রিন্ট করা
+    var title = item.getTitle();
+    var p = body.appendParagraph("Q" + questionCounter + ". " + title);
+    p.setAttributes(qStyle);
+    questionCounter++;
+
+    // প্রশ্নের ধরন অনুযায়ী অপশন সাজানো
+    switch (type) {
+      case FormApp.ItemType.TEXT:
+      case FormApp.ItemType.PARAGRAPH_TEXT:
+        body.appendParagraph("  __________________________________________________________\n").setForegroundColor('#7F8C8D');
+        break;
+
+      case FormApp.ItemType.MULTIPLE_CHOICE:
+      case FormApp.ItemType.CHECKBOX:
+      case FormApp.ItemType.LIST:
+        var choices;
+        if (type === FormApp.ItemType.MULTIPLE_CHOICE) choices = item.asMultipleChoiceItem().getChoices();
+        else if (type === FormApp.ItemType.CHECKBOX) choices = item.asCheckboxItem().getChoices();
+        else if (type === FormApp.ItemType.LIST) choices = item.asListItem().getChoices();
+
+        for (var j = 0; j < choices.length; j++) {
+          // চেকবক্স হলে চারকোনা, অন্যথায় গোল সিম্বল
+          var symbol = (type === FormApp.ItemType.CHECKBOX) ? "☐ " : "○ ";
+          body.appendParagraph("   " + symbol + choices[j].getValue()).setIndentStart(36).setFontSize(11);
+        }
+        body.appendParagraph("");
+        break;
+
+      case FormApp.ItemType.SCALE:
+        var scaleItem = item.asScaleItem();
+        body.appendParagraph("   [ Scale: " + scaleItem.getLeftLabel() + " (1)  <--->  (" + scaleItem.getUpperBound() + ") " + scaleItem.getRightLabel() + " ]").setIndentStart(36).setItalic(true).setForegroundColor('#555555');
+        body.appendParagraph("");
+        break;
+
+      case FormApp.ItemType.GRID:
+      case FormApp.ItemType.CHECKBOX_GRID:
+         body.appendParagraph("   [ Grid Matrix Question - See original form for 2D layout ]").setIndentStart(36).setItalic(true).setForegroundColor('#555555');
+         body.appendParagraph("");
+         break;
+
+      default:
+        body.appendParagraph("   [ Answer Space ]\n").setIndentStart(36).setForegroundColor('#7F8C8D');
+    }
+  }
+
+  try {
+    FormApp.getUi().alert('Success! Document perfectly formatted.\nName: ' + docName);
+  } catch (e) {
+    Logger.log('Success: Formatted document created in Drive.');
+  }
+}
