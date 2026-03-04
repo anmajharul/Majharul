@@ -23,3 +23,14 @@ This script is highly useful for researchers, civil engineers, and data analysts
 
 ## Use Case
 Originally developed for exporting thesis survey questionnaires regarding **Mode Shift Behavior**. It ensures proper indentation and readable scales, eliminating the need for manual copy-pasting.
+
+# Author
+
+Majharul Islam  
+Civil Engineering Student  
+Bangladesh University of Business and Technology (BUBT)
+
+Research Focus:
+Transportation Engineering  
+Travel Behavior Analysis  
+Discrete Choice Modeling
