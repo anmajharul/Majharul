@@ -1,0 +1,241 @@
+from docx import Document
+from docx.shared import Pt, Inches, RGBColor
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+
+def create_ultimate_survey(raw_text, output_filename="BUBT_Survey_Final_Perfect.docx"):
+    doc = Document()
+    
+    # গ্লোবাল স্টাইল সেটআপ: Arial, Size 12, Black color
+    style = doc.styles['Normal']
+    font = style.font
+    font.name = 'Arial'
+    font.size = Pt(12)
+    font.color.rgb = RGBColor(0, 0, 0)
+    
+    # সম্পূর্ণ জিরো স্পেসিং লজিক
+    style.paragraph_format.space_before = Pt(0)
+    style.paragraph_format.space_after = Pt(0)
+    style.paragraph_format.line_spacing = 1.0
+
+    lines = raw_text.strip().split('\n')
+    
+    for line in lines:
+        line = line.strip()
+        
+        # ফাঁকা লাইন পুরোপুরি স্কিপ
+        if not line:
+            continue
+            
+        p = doc.add_paragraph()
+        p.paragraph_format.space_before = Pt(0)
+        p.paragraph_format.space_after = Pt(0)
+            
+        # সেকশন ব্রেক বা দাগ
+        if "--- Section Break ---" in line or "________________________________________________" in line:
+            p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            run = p.add_run("__________________________________________________")
+            run.font.color.rgb = RGBColor(150, 150, 150)
+            continue
+            
+        # প্রশ্ন (Q1, Q2 ইত্যাদি)
+        if line.startswith('Q') and '.' in line[:5]:
+            run = p.add_run(line)
+            run.bold = True
+            
+        # সাধারণ অপশন (চেকবক্স)
+        elif line.startswith('☐') or line.startswith('○'):
+            clean_option = line.replace('○', '☐').strip() 
+            run = p.add_run(clean_option)
+            p.paragraph_format.left_indent = Inches(0.2)
+            
+        # শূন্যস্থান
+        elif line.startswith('__'):
+            run = p.add_run("   _______________________________________")
+            run.font.color.rgb = RGBColor(100, 100, 100)
+            
+        # স্কেল রেটিং বক্স লজিক (যেটা আপনার ফাইলে মিসিং ছিল)
+        elif line.startswith('['):
+            clean_line = line.replace('[ Scale:', '').replace(']', '').strip()
+            parts = clean_line.split('<--->')
+            
+            left_label = parts[0].replace('(1)', '').strip() if len(parts) > 0 else "1"
+            right_label = parts[1].replace('(5)', '').strip() if len(parts) > 1 else "5"
+            
+            p.paragraph_format.left_indent = Inches(0.2)
+            
+            # বাম পাশের লেবেল
+            run_left = p.add_run(f"{left_label}  ")
+            run_left.font.color.rgb = RGBColor(80, 80, 80)
+            run_left.font.size = Pt(10)
+            
+            # ৫টি রেটিং বক্স
+            run_boxes = p.add_run("☐ 1   ☐ 2   ☐ 3   ☐ 4   ☐ 5")
+            run_boxes.bold = True
+            
+            # ডান পাশের লেবেল
+            run_right = p.add_run(f"  {right_label}")
+            run_right.font.color.rgb = RGBColor(80, 80, 80)
+            run_right.font.size = Pt(10)
+            
+        # সাধারণ টেক্সট (টাইটেল বা ডেসক্রিপশন)
+        else:
+            if "Mode Shift Behavior" in line: 
+                p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                run = p.add_run(line)
+                run.bold = True
+                run.font.size = Pt(14)
+            else:
+                p.add_run(line)
+
+    doc.save(output_filename)
+    print(f"Success! Ultimate survey form saved as: {output_filename}")
+
+
+# আপনার সম্পূর্ণ র টেক্সট এখানে বসান
+raw_survey_text = """
+Mode Shift Behavior Using Discrete Choice Models: A Case Study of BUBT Students in Dhaka
+This BUBT Civil Engineering thesis analyzes how you trade Time vs. Money vs. Comfort. We need your brutal honesty: If you would switch to a local bus to save 20 Taka, say so. Don't give "ideal" answers—give us reality. Target: Current BUBT Students Only. Time Required: Approx. 3-5 minutes. Privacy: Your responses are 100% anonymous and will be used strictly for academic statistical analysis.
+Researcher: Majharul Islam and Shawon Mahmud | Supervisor: Akib Mohammad Sunny and Ahmed Jarif
+Department of Civil Engineering, Bangladesh University of Business and Technology (BUBT)
+
+--- Section Break ---
+
+Q1. Do you agree to participate in this anonymous survey?
+☐ Yes
+☐ No
+
+Q2. What is your age?
+__________________________________________________
+
+Q3. Gender
+☐ Male
+☐ Female
+☐ Prefer not to say
+
+Q4. Which department are you currently studying in?
+__________________________________________________
+
+Q5. Total number of family members living in your household (including yourself):
+__________________________________________________
+
+Q6. How many members of your family earn an income?
+__________________________________________________
+
+Q7. What is your family's approximate total monthly income from all sources?
+☐ Less than 30,000 BDT
+☐ 30,000 – 60,000 BDT
+☐ 60,001 – 1,00,000 BDT
+☐ 1,00,001 – 1,50,000 BDT
+☐ More than 1,50,000 BDT
+
+Q8. What is your personal monthly expenditure? (Pocket money + Earnings)
+☐ Less than 5,000 BDT
+☐ 5,001 – 8,000 BDT
+☐ 8,001 – 12,000 BDT
+☐ 12,001 – 20,000 BDT
+☐ More than 20,000 BDT
+
+--- Section Break ---
+
+Q9. From which area do you start your journey?
+__________________________________________________
+
+Q10. What is your destination?
+__________________________________________________
+
+Q11. What is the primary purpose of this trip?
+☐ Education (Classes/Exam)
+☐ Work / Job
+☐ Personal Business
+
+Q12. What is your PRIMARY mode of transport?
+☐ MRT (Metro Rail)
+☐ Public Bus
+☐ Ridesharing (Uber/Pathao)
+☐ Private Car
+☐ Personal Motorcycle
+
+Q13. How do you get from your home to the first Station or Bus Stop?
+☐ Walk
+☐ Rickshaw
+☐ Auto / Leguna
+☐ N/A
+
+Q14. What is your total "Access Time" Time needed to reach the Station/Stop in Minutes ?
+__________________________________________________
+
+Q15. What is yout total "In-Vehicle Time" Time spent inside the main bus/train/car in Minutes?
+__________________________________________________
+
+Q16. What is the TOTAL One-Way Cost of this trip?
+__________________________________________________
+
+Q17. How crowded is the vehicle usually?
+[ Scale: Overcrowded (Crushed/Difficult to breathe) (1)  <--->  (5) Seat Available (Comfortable) ]
+
+--- Section Break ---
+
+Q18. If the fare of your current primary mode INCREASED by 10% (e.g., +5-10 Taka), would you switch to a different mode?
+☐ Yes
+☐ No
+☐ Maybe
+
+Q19. Imagine the MRT/Bus is so crowded that you MUST stand the entire way every day. Would you switch to a different bus that guarantees a SEAT but takes 15 minutes longer?
+☐ Yes
+☐ No
+☐ Maybe
+
+Q20. "Premium Bus" service (AC + Guaranteed Seat) was available but cost DOUBLE your current fare, would you take it?
+☐ Yes
+☐ No
+☐ Maybe
+
+Q21. If your current mode arrived 10 minutes LATE three times a week, would you switch to a more reliable option?
+☐ Yes
+☐ No
+☐ Maybe
+
+Q22. How reliable is your current mode? (Does it arrive on time?)
+[ Scale: Always Late (1)  <--->  (5) Always on Time ]
+
+Q23. How would you rate the physical comfort (Seating space, AC, Noise) of your current mode?
+[ Scale: Very Uncomfortable (1)  <--->  (5) Very Comfortable ]
+
+Q24. How safe do you feel regarding road accidents on this mode?
+[ Scale: Very Unsafe (1)  <--->  (5) Very Safe ]
+
+Q25. How safe do you feel regarding harassment, pickpocketing, or personal security?
+[ Scale: Very Unsafe (1)  <--->  (5) Very Safe ]
+
+--- Section Break ---
+
+Q26. If your current primary mode was unavailable, what would be your second choice?
+☐ MRT (Metro Rail)
+☐ Public Bus
+☐ Rickshaw / Auto-Rickshaw
+☐ Ridesharing Bike (Uber/Pathao)
+☐ Private Car
+☐ Personal Motorcycle
+☐ Bicycle
+☐ I would not travel (Stay Home) (Crucial option for "induced demand" analysis)
+
+Q27. If it is raining heavily, how does your travel choice change?
+☐ No Change
+☐ Switch Mode
+☐ Wait
+☐ Cancel Trip
+
+Q28. During a Strike (Hartal) or Road Blockade, how do you usually travel?
+☐ I do not travel
+☐ I use the MRT (If available)
+☐ I walk
+☐ I use a Rickshaw
+☐ I use my Personal Bike/Bicycle
+
+Q29. If a dedicated BUBT Student Bus was introduced in your area with a strict daily schedule (e.g., leaves exactly at 7:30 AM and returns exactly at 4:00 PM), would you switch to it from your current mode?
+☐ Yes, I would switch to the BUBT Bus.
+☐ No, I need flexible travel times.
+☐ No, my current mode is faster / more comfortable.
+"""
+
+create_ultimate_survey(raw_survey_text)
