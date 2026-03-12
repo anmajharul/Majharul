@@ -1,56 +1,138 @@
+# 🥷 Shadow Clone Jutsu (Real-Time Computer Vision Cloning System)
 
-1. Real-time Shadow Clone Jutsu | Computer Vision & AI
-This project is part of my AI-Computer-Vision-Playground. It demonstrates the use of real-time hand gesture recognition and image segmentation to create an interactive "Shadow Clone" effect inspired by the Naruto series.
+A standalone Python Computer Vision application that creates Naruto-style shadow clone effects in real time using a webcam.
 
-While this project is "fun" in nature, the underlying technology has significant applications in Smart Transportation Systems and Human-Machine Interaction (HMI).
+This project demonstrates foreground extraction, frame compositing, and multi-instance rendering using classical Computer Vision techniques. It is useful for students, researchers, and developers exploring real-time video processing, human segmentation, and interactive visual effects.
 
-Core Technical Logic
-The system operates through a multi-stage pipeline:
+---
 
-Hand Landmark Tracking: Using MediaPipe Hands, I track 42 specific 3D coordinates (21 per hand). This allows the system to understand the exact geometry of the hand pose.
+## Features
 
-Gesture Recognition (ML): I trained a custom classifier using Scikit-learn to recognize the specific "Shadow Clone" hand sign.
+* **Real-Time Webcam Processing:** Captures and processes live video feed with minimal latency
+* **Foreground Extraction:** Separates the subject from the background
+* **Clone Generation:** Creates multiple visual copies of the user within the scene
+* **Live Rendering:** Displays clones simultaneously in real time
+* **Lightweight Implementation:** Runs on CPU without requiring GPU acceleration
+* **Interactive Demo:** Simple controls for capturing and managing clones
 
-Confidence Filtering: To prevent false positives, I implemented a 0.85 (85%) probability threshold. The effect only triggers when the AI is highly certain of the sign.
+---
 
-Selfie Segmentation: Using MediaPipe Selfie Segmentation, the system extracts the user from the background in real-time.
+## How It Works
 
-Alpha Blending & Compositing: The extracted user is duplicated and shifted horizontally (15% and 30% offsets). The original user is always rendered on the top layer to maintain a realistic 3D depth.
+1. Captures frames from the webcam
+2. Performs background subtraction / segmentation
+3. Extracts the foreground (user) as a mask
+4. Stores selected frames as clone templates
+5. Overlays multiple clones onto the scene
+6. Displays the composited output continuously
 
-Engineering Applications (Civil & Transportation)
-As a Civil Engineer specialized in Transportation, I developed this to explore:
+---
 
-Driver Monitoring Systems (DMS): Using hand tracking to detect driver distraction or steering wheel engagement.
+## Requirements
 
-Pedestrian Behavior Analysis: Utilizing segmentation to extract and analyze pedestrian movement patterns at intersections for safety studies.
+* Python 3.7 or higher
+* OpenCV
+* NumPy
+* Webcam
 
-Smart Mobility UI: Developing gesture-based controls for vehicle dashboards to minimize physical interaction and maximize road focus.
+---
 
-How to Run
-Clone the Repository:
+## How to Use
 
-Bash
+1. Clone the repository
+
+```
 git clone https://github.com/anmajharul/Majharul.git
-cd AI-Computer-Vision-Playground/01_Shadow_Clone_Jutsu
-Install Dependencies:
-Make sure you have Python 3.10+ installed.
+cd Majharul/AI-Computer-Vision-Playground/Shadow_Clone_Jutsu
+```
 
-Bash
-pip install -r ../requirements.txt
-Run the Script:
+2. Install dependencies
 
-Bash
-python detect_jutsu.py
-Controls:
+```
+pip install -r requirements.txt
+```
 
-'f': Toggle Fullscreen Mode.
+3. Run the application
 
-'n': Return to Normal Windowed Mode (with minimize buttons).
+```
+python main.py
+```
 
-'q': Quit the application.
+4. Allow webcam access if prompted
+
+---
+
+## Controls
+
+*(Adjust if your implementation differs)*
+
+* **C** → Capture a clone
+* **R** → Reset all clones
+* **Q / ESC** → Exit application
+
+---
+
+## Use Case
+
+Originally developed as a Computer Vision demonstration project to explore real-time human segmentation and visual compositing techniques.
+
+Applicable for:
+
+* Computer Vision learning and experimentation
+* Real-time video processing demos
+* Interactive media applications
+* Academic projects and presentations
+* Portfolio demonstrations
+
+---
+
+## Limitations
+
+* Works best with a stable background
+* Sensitive to lighting variations
+* Segmentation accuracy depends on environment
+* Not depth-aware (2D compositing only)
+
+---
+
+## Possible Improvements
+
+* Deep learning–based segmentation (MediaPipe / DeepLab)
+* Gesture-controlled clone creation
+* Pose tracking for animated clones
+* Depth estimation for realistic layering
+* Augmented Reality integration
+
+---
 
 
->>>>>>> 3f45c95 (feat: initialize computer vision playground with shadow clone project)
+## 🚦 Transportation & Smart Infrastructure Applications
+
+Although originally developed as a visual demonstration, the underlying multi-instance rendering framework has direct relevance to Transportation Engineering and Intelligent Transportation Systems (ITS).
+
+The cloning mechanism can be interpreted as real-time multi-agent scene generation, where each instance represents an individual pedestrian or vehicle within a shared environment.
+
+**Potential applications include:**
+
+* Pedestrian flow and crowd dynamics visualization
+* Congestion analysis in transit facilities (stations, terminals, platforms)
+* Traffic density and queue formation demonstration
+* Synthetic data generation for transportation-related computer vision models
+* Smart city and urban mobility scenario presentation
+
+Such capabilities are relevant to studies involving Level of Service (LOS), human mobility, and infrastructure performance evaluation.
+
+**Research potential:**
+With additional modules such as object tracking, depth estimation, or deep learning–based segmentation, the system can evolve into a real-time multi-agent visualization framework for transportation planning, safety analysis, and operational research.
+
+**Limitations:**
+Performance depends on stable environmental conditions; current implementation is limited to 2D compositing without depth awareness.
+
+**Future work:**
+Integration of advanced segmentation models, pose tracking, depth sensing, and augmented reality techniques to improve realism and analytical utility.
+
+
+
 
 # Author
 
@@ -63,10 +145,6 @@ Transportation Engineering
 Travel Behavior Analysis  
 Discrete Choice Modeling
 
-
-© Majharul Islam – Research Portfolio
-=======
 [![Portfolio](https://img.shields.io/badge/Website-anmajharul.bd-blue?style=for-the-badge&logo=googlechrome)](https://anmajharul.bd) 
 
 © Majharul Islam – Research Portfolio
->>>>>>> 3f45c95 (feat: initialize computer vision playground with shadow clone project)
