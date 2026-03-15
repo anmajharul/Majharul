@@ -3,9 +3,10 @@ import mediapipe as mp
 import csv
 import time
 
-# ১. ক্যামেরা স্ক্যানার ফাংশন
+
+# 1. Camera scanner function
 def get_available_cameras():
-    print("\nক্যামেরা স্ক্যান করা হচ্ছে... দয়া করে অপেক্ষা করুন।")
+    print("\nScanning cameras... please wait.")
     available_indices = []
     for i in range(5):
         cap = cv2.VideoCapture(i, cv2.CAP_DSHOW)
@@ -14,67 +15,70 @@ def get_available_cameras():
             if ret:
                 available_indices.append(i)
                 cv2.imshow(f"Camera Index: {i}", frame)
-                cv2.waitKey(1000) 
+                cv2.waitKey(1000)
                 cv2.destroyAllWindows()
             cap.release()
     return available_indices
 
+
 found_cameras = get_available_cameras()
 if not found_cameras:
-    print("!!! এরর: কোনো ক্যামেরা পাওয়া যায়নি।")
+    print("Error: no camera found.")
     exit()
 
-print(f"\nপাওয়া গেছে এমন ক্যামেরার তালিকা: {found_cameras}")
-chosen_index = int(input("আপনি কত নম্বর ক্যামেরা ইনডেক্সটি ব্যবহার করতে চান? "))
+print(f"\nAvailable camera indices: {found_cameras}")
+chosen_index = int(input("Which camera index do you want to use? "))
 
-# ২. মিডিয়াপাইপ ও ক্যামেরা সেটআপ
+# 2. MediaPipe and camera setup
 cap = cv2.VideoCapture(chosen_index, cv2.CAP_DSHOW)
 mp_hands = mp.solutions.hands
 mp_draw = mp.solutions.drawing_utils
 hands = mp_hands.Hands(max_num_hands=2, min_detection_confidence=0.5)
 
-# ৩. ইউজার মোড সিলেকশন
-print("\n--- অটো ডাটা কালেকশন মোড ---")
-mode = input("কোন ডাটা নিবেন? (জুটসুর জন্য '1', নরমাল হাতের জন্য '0'): ")
+# 3. User mode selection
+print("\n--- Auto Data Collection Mode ---")
+mode = input("Which data will you capture? (jutsu='1', normal hands='0'): ")
 label = int(mode)
-target_samples = 100 # কয়টি ডাটা পয়েন্ট নিবেন
+target_samples = 100  # How many data points to capture
 
-print(f"\nপ্রস্তুত হন! ৫ সেকেন্ড পর ডাটা সেভ শুরু হবে...")
+print("\nGet ready! Data capture starts in 5 seconds...")
 for i in range(5, 0, -1):
     print(f"{i}...")
     time.sleep(1)
 
-print("\n!!! শুরু !!! পোজ ধরে রাখুন...")
+print("\nStarting! Hold your pose...")
 
 count = 0
 while count < target_samples:
     success, img = cap.read()
-    if not success: break
+    if not success:
+        break
 
     img = cv2.flip(img, 1)
     img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     results = hands.process(img_rgb)
 
     if results.multi_hand_landmarks:
-        # শুধুমাত্র ২ হাত থাকলেই ১২৬টি পয়েন্ট পাওয়া যাবে
+        # Only collect when two hands are visible (126 points)
         if len(results.multi_hand_landmarks) == 2:
             all_landmarks = []
             for hand_landmarks in results.multi_hand_landmarks:
                 mp_draw.draw_landmarks(img, hand_landmarks, mp_hands.HAND_CONNECTIONS)
                 for lm in hand_landmarks.landmark:
                     all_landmarks.extend([lm.x, lm.y, lm.z])
-            
-            all_landmarks.append(label) # শেষে লেবেল যোগ করা হচ্ছে (০ বা ১)
-            
-            with open('jutsu_data.csv', mode='a', newline='') as f:
+
+            all_landmarks.append(label)  # Add label at the end (0 or 1)
+
+            with open("jutsu_data.csv", mode="a", newline="") as f:
                 csv.writer(f).writerow(all_landmarks)
-            
+
             count += 1
-            print(f"সংগৃহীত ডাটা: {count}/{target_samples}", end="\r")
+            print(f"Collected data: {count}/{target_samples}", end="\r")
 
     cv2.imshow("Auto Data Collection", img)
-    if cv2.waitKey(1) & 0xFF == ord('q'): break
+    if cv2.waitKey(1) & 0xFF == ord("q"):
+        break
 
-print(f"\n\nঅভিনন্দন! সফলভাবে {count}টি ডাটা সেভ হয়েছে।")
+print(f"\n\nDone! Successfully saved {count} samples.")
 cap.release()
 cv2.destroyAllWindows()

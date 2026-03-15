@@ -1,0 +1,60 @@
+import cv2
+import os
+import numpy as np
+import random
+
+
+def clone_and_augment(image_path, output_folder, prefix="Ox", num_clones=50):
+    # 1. Read the original image
+    img = cv2.imread(image_path)
+    if img is None:
+        print(f"Error: image not found at '{image_path}'. Check the path.")
+        return
+
+    # 2. Create output folder if missing
+    os.makedirs(output_folder, exist_ok=True)
+
+    print(f"Creating {num_clones} augmented '{prefix}' images from '{image_path}'...")
+
+    # 3. Generate clones
+    for i in range(1, num_clones + 1):
+        clone = img.copy()
+
+        # Random horizontal flip
+        if random.choice([True, False]):
+            clone = cv2.flip(clone, 1)
+
+        # Random brightness shift
+        value = random.randint(-40, 40)
+        hsv = cv2.cvtColor(clone, cv2.COLOR_BGR2HSV)
+        h, s, v = cv2.split(hsv)
+        v = cv2.add(v, value)
+        v[v > 255] = 255
+        v[v < 0] = 0
+        final_hsv = cv2.merge((h, s, v))
+        clone = cv2.cvtColor(final_hsv, cv2.COLOR_HSV2BGR)
+
+        # Random noise
+        noise = np.random.randint(0, 50, clone.shape, dtype="uint8")
+        if random.choice([True, False]):
+            clone = cv2.add(clone, noise)
+
+        # 4. Smart naming (01, 02... 50)
+        file_name = f"{prefix}_{i:02d}.jpg"
+        save_path = os.path.join(output_folder, file_name)
+
+        # 5. Save
+        cv2.imwrite(save_path, clone)
+        print(f"Saved -> {save_path}")
+
+    print(f"\nSuccessfully created {num_clones} images for '{prefix}'!")
+
+
+# === Script settings (relative paths) ===
+# If you run this script inside the Ox folder, use the filenames directly.
+# Make sure the original image 'Ox.jpg' exists in the same folder as this script.
+source_image = "Ox.jpg"
+destination_folder = "cloned_images"
+
+# Prefix stays "Ox"
+clone_and_augment(source_image, destination_folder, prefix="Ox", num_clones=50)

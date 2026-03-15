@@ -1,0 +1,23 @@
+names:
+- Hitsuji -ram-
+- I -boar-
+- Inu -dog-
+- Mi -snake-
+- Ne -rat-
+- Saru -monkey-
+- Tatsu -dragon-
+- Tora -tiger-
+- Tori -bird-
+- U -hare-
+- Uma -horse-
+- Ushi -ox-
+nc: 12
+roboflow:
+  license: CC BY 4.0
+  project: naruto-lkanh
+  url: https://universe.roboflow.com/chayawats-workspace-z7lzz/naruto-lkanh/dataset/1
+  version: 1
+  workspace: chayawats-workspace-z7lzz
+test: ../test/images
+train: ../train/images
+val: ../valid/images
